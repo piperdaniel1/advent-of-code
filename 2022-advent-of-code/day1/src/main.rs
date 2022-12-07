@@ -75,4 +75,14 @@ fn main() {
     let highest_cal = backpacks.max();
 
     println!("Elf with the most calories: #{} with {} calories", highest_cal_idx, highest_cal);
+
+    backpacks.sort_by(|a, b| b.get_total_cals().cmp(&a.get_total_cals()));
+
+    let mut total = 0;
+    for i in 0..3 {
+        println!("{}", backpacks[i].get_total_cals());
+        total += backpacks[i].get_total_cals();
+    }
+
+    println!("Total: {}", total);
 }
