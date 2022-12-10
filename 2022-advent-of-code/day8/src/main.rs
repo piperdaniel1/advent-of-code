@@ -263,20 +263,20 @@ fn main() {
         println!();
     }
 
-    println!("Total visible: {}", total_visible);
+    println!("Total visible (p1): {}", total_visible);
 
+    let mut best_score = 0;
     for y in 0..tree_map.map.len() {
         for x in 0..tree_map.map[y].len() {
             let square = Square::new(x as i32, y as i32);
             let score = tree_map.calc_scenic_score(&square, false);
-            print!("{} ", score);
+            if score > best_score {
+                best_score = score;
+            }
         }
-        println!();
     }
 
-    let test_square = Square::new(2, 3);
-    let score = tree_map.calc_scenic_score(&test_square, true);
-    println!("Score: {}", score);
+    println!("Best score (p2): {}", best_score);
 
     
 
