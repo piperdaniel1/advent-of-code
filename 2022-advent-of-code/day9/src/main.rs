@@ -99,7 +99,7 @@ fn main() {
     tail_positions.insert(tail, 0);
 
     // Parse inputs
-    for line in input_vec {
+    for line in &input_vec {
         let dir = parse_line(line);
 
         let magnitude = match dir {
@@ -129,6 +129,62 @@ fn main() {
 
     // Report all positions
     let num_pos = tail_positions.len();
-
     println!("Number of positions (p1): {}", num_pos);
+
+    let mut head = Position::new(0, 0);
+    let mut tails: Vec<Position> = Vec::new();
+
+    for _ in 1..=9 {
+        tails.push(Position::new(0, 0));
+    }
+
+    let mut tail_positions_p2: HashMap<Position, i32> = HashMap::new();
+
+    // Add the starting position
+    tail_positions_p2.insert(tails[8], 0);
+
+    for line in &input_vec {
+        let dir = parse_line(line);
+
+        let magnitude = match dir {
+            Direction::Up(m) => m,
+            Direction::Down(m) => m,
+            Direction::Left(m) => m,
+            Direction::Right(m) => m,
+        };
+
+        for _ in 0..magnitude {
+            match dir {
+                Direction::Up(m) => head.y -= conv_movement(m),
+                Direction::Down(m) => head.y += conv_movement(m),
+                Direction::Left(m) => head.x -= conv_movement(m),
+                Direction::Right(m) => head.x += conv_movement(m),
+            }
+
+            for i in 0..tails.len() {
+                let new_pos: Position;
+                if i == 0 {
+                    new_pos = get_new_tail_pos(&head, &tails[0]);
+                } else {
+                    new_pos = get_new_tail_pos(&tails[i-1], &tails[i])
+                }
+
+
+                // we moved the tail
+                if i == tails.len()-1 && tails[i] != new_pos {
+                    let curr_val = tail_positions_p2.get(&new_pos);
+
+                    match curr_val {
+                        Some(val) => tail_positions_p2.insert(new_pos, val+1),
+                        None => tail_positions_p2.insert(new_pos, 1),
+                    };
+                }
+
+                tails[i] = new_pos;
+            }
+        }
+    }
+
+    let num_pos_p2 = tail_positions_p2.len();
+    println!("Number of positions (p2): {}", num_pos_p2);
 }
