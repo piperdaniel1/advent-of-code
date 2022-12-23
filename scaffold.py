@@ -1,7 +1,17 @@
 import sys
-import requests
 import os
-import pyperclip
+
+try:
+    import requests
+except ModuleNotFoundError:
+    print("Sorry, but the Python 'requests' module is required for the program to run.")
+    sys.exit(0)
+
+try:
+    import pyperclip
+except ModuleNotFoundError:
+    print("Sorry, but the Python 'pyperclip' module is required for the program to run.")
+    sys.exit(0)
 
 def scaffold_rust(year, day):
     RUST_TEMPLATE = "rust_template.rs"
